@@ -23,7 +23,7 @@ namespace snake
         int snakeSpeedX = snakeStartSpeed;
         int snakeSpeedY = 0;
         int foodCount = 0;
-        int snakeLength = 10;
+        int snakeLength = 60;
 
         PictureBox food;
         TextBox endGame;
@@ -44,7 +44,7 @@ namespace snake
             this.Width = SCREEN_WIDTH;
             this.Height = SCREEN_HEIGHT;
             this.StartPosition = FormStartPosition.Manual;
-            this.BackColor = Color.Coral;
+            this.BackColor = Color.LightGray;
             this.DoubleBuffered = true;                 // Prevents flickering
             
             food = new PictureBox();
@@ -115,7 +115,7 @@ namespace snake
 
             checkFood();                                                    // Check if snake intercepts food
             checkCollision();                                               // Check if snake hits wall
-          //  checkselfcollision();
+           checkselfcollision();
         }
 
         private void checkCollision()             // Have amended the boundaries to take into account a small margin on the sides
@@ -133,7 +133,34 @@ namespace snake
             if (snakeSpeedX > 0)
             {
                 edge.Location = new Point(snakes[0].Bounds.Right, snakes[0].Bounds.Top);
-                edge.Size = new Size(snakeSpeedX, snakes[0].Height);
+                edge.Size = new Size(2, snakes[0].Height);
+            }
+
+            if (snakeSpeedX < 0)
+            {
+                edge.Location = new Point(snakes[0].Bounds.Left-2, snakes[0].Bounds.Top);
+                edge.Size = new Size(2, snakes[0].Height);
+            }
+
+            if (snakeSpeedY > 0)
+            {
+                edge.Location = new Point(snakes[0].Bounds.Left, snakes[0].Bounds.Bottom);
+                edge.Size = new Size(snakes[0].Width, 2);
+            }
+
+            if (snakeSpeedY < 0)
+            {
+                edge.Location = new Point(snakes[0].Bounds.Left, snakes[0].Bounds.Top-2);
+                edge.Size = new Size(snakes[0].Width, 2);
+            }
+
+
+            for (int i = 1; i < snakeLength; i++)
+            {
+                if (edge.Bounds.IntersectsWith(snakes[i].Bounds))
+                {
+                    gameOver();
+                }
             }
 
         }
